@@ -1,7 +1,7 @@
 #!/bin/bash  
 
 # Configuration  
-CONTAINER_NAME="viadven_container"  
+CONTAINER_NAME="vieadven_container"  
 SQL_FILE="src/database/migrations/create_tables.sql"  
 
 #Stop the running container

@@ -1,7 +1,8 @@
 #!/bin/bash  
 # Configuration  
-CONTAINER_NAME="viadven_container"  
+CONTAINER_NAME="vieadven_container"  
 MIGRATIONS_DIR="src/database/migrations"  
+
 
 # Pull image  
 docker compose up -d  
@@ -31,7 +32,7 @@ for SQL_FILE in "$MIGRATIONS_DIR"/*.sql; do
       # Execute the SQL script inside the container  
       SCRIPT_NAME=$(basename "$SQL_FILE")  # Get the base name of the file  
       echo "Executing $SCRIPT_NAME in container $CONTAINER_NAME..."  
-      docker exec -it "$CONTAINER_NAME" psql -U viadvendev -d viadvenweb -f "tmp/$SCRIPT_NAME"  
+      docker exec -it "$CONTAINER_NAME" psql -U vieadvendev -d vieadvenweb -f "tmp/$SCRIPT_NAME"  
       
       # Check if the command succeeded  
       if [ $? -eq 0 ]; then  
