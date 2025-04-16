@@ -1,21 +1,52 @@
 {
   "name": "server-vieadven-webapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "server-vieadven-webapp",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "lint": "eslint src/**/*.{ts,tsx}",
     "startMock": "bash ./startMock.sh",
     "stopMock": "bash ./stopMock.sh"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/avytran/server-vieadven-webapp.git"
-  },
-  "author": "",
+  "author": "et-members",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/avytran/server-vieadven-webapp/issues"
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "nodemailer": "^6.10.0",
+    "pg": "^8.13.3",
+    "uuid": "^11.1.0"
   },
-  "homepage": "https://github.com/avytran/server-vieadven-webapp#readme"
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "eslint": "^8.21.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix",
+    "*.tsx": "eslint --fix"
+  }
 }
