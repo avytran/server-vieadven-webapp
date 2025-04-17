@@ -5,10 +5,10 @@ import knex, { Knex } from 'knex';
      client: 'pg', 
      connection: {  
        host: 'localhost',   
-       user: 'etclubdev', 
-       password: 'etclubdev',
-       database: 'etclubweb', 
-       port: 5432,  
+       user: 'vieadvendev', 
+       password: 'vieadvendev',
+       database: 'vieadvenweb', 
+       port: 5433,  
      }
    }
  };  
