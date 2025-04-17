@@ -34,7 +34,7 @@ CREATE TABLE "User" (
     email VARCHAR(100),
     password VARCHAR(255),
     avatar_url VARCHAR(255),
-    created_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_played TIMESTAMP
 );
 
@@ -91,6 +91,20 @@ CREATE TABLE Leaderboard (
     updated_at TIMESTAMP
 );
 
+--Create function and trigger to update "updated_at"
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_updated_at
+BEFORE UPDATE ON Leaderboard
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
 -- 12. Gameplay (phụ thuộc Player, Landmark)
 CREATE TABLE Gameplay (
     gameplay_id SERIAL PRIMARY KEY,
@@ -135,6 +149,21 @@ CREATE TABLE Player_DailyMission (
     claimed BOOLEAN,
     PRIMARY KEY (user_id, mission_id)
 );
+
+--Create function and trigger to update "last_update"
+CREATE OR REPLACE FUNCTION update_last_update_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.last_update := CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_last_update
+BEFORE UPDATE ON Player_DailyMission
+FOR EACH ROW
+EXECUTE FUNCTION update_last_update_column();
+
 
 -- 17. Feedback (độc lập)
 CREATE TABLE Feedback (
