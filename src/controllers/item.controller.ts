@@ -46,5 +46,52 @@ export default {
                 message: 'Internal Server Error' + " " + error.message
             })
         }
+    },
+    deleteItem: async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params
+            const deletedItem = await itemService.deleteItem(id)
+
+
+            if (!deletedItem) {
+                logger.logWarning('itemService', 'Not found', 404)
+                res.status(404).json({
+                    message: 'Not found'
+                })
+                return;
+            }
+
+            res.sendStatus(204);
+            return;
+        } catch (error) {
+            logger.logError('itemService', 'Internal Server Error ' + error.message, error, 500)
+            res.status(500).json({
+                message: 'Internal Server Error ' + error.message
+            })
+            return;
+        }
+    },
+    deleteItems: async (req: Request, res: Response) => {
+        try {
+            const { item_ids } = req.body
+            const deletedItem = await itemService.deleteItems(item_ids)
+
+            if (!deletedItem) {
+                logger.logWarning('itemService', 'Not found', 404)
+                res.status(404).json({
+                    message: 'Not found'
+                })
+                return;
+            }
+
+            res.sendStatus(204);
+            return;
+        } catch (error) {
+            logger.logError('itemService', 'Internal Server Error ' + error.message, error, 500)
+            res.status(500).json({
+                message: 'Internal Server Error ' + error.message
+            })
+            return;
+        }
     }
 }
