@@ -8,7 +8,7 @@ export default {
         try {
             const item = req.body
             const createdItem = await itemService.createItem(item);
-            
+
             res.status(201).json({
                 message: 'Successfully',
                 data: createdItem
@@ -20,6 +20,31 @@ export default {
                 message: 'Internal Server Error' + " " + error.message
             })
             return;
+        }
+    },
+    getAllItems: async (req: Request, res: Response) => {
+        try {
+            const items = await itemService.getAllItems();
+            console.log(items)
+
+            if (!items) {
+                logger.logWarning('itemService', 'No item found', 404)
+                res.status(404).json({
+                    message: 'No item found',
+                })
+                return;
+            }
+
+            res.status(200).json({
+                message: 'Successfully',
+                data: items
+            })
+            return;
+        } catch (error) {
+            logger.logError('itemService', 'Internal Server Error ' + error.message, error, 500)
+            res.status(500).json({
+                message: 'Internal Server Error' + " " + error.message
+            })
         }
     }
 }

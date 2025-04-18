@@ -6,5 +6,14 @@ export default {
         return await db('item')
         .insert(item)
         .returning('*')
-    }
+    },
+    getAllItems: async () => {
+        const items = await db('item')
+            .select('*')
+
+        if (items.length === 0)
+            return null;
+
+        return items;
+    },
 }

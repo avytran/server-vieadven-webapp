@@ -7,5 +7,6 @@ import validate from '../middlewares/validate.mdw'
 const router = express.Router();
 
 router.post('/', validate(createItemSchema), itemController.createItem)
+router.get('/', itemController.getAllItems);
 
 export default router;
