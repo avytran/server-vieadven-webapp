@@ -121,5 +121,32 @@ export default {
             })
             return;
         }
+    },
+    getItemById: async (req: Request, res: Response) => {
+        const { id } = req.params;
+
+        try {
+            const item = await itemService.getItemById(id)
+
+            if (!item) {
+                logger.logWarning('getItemService', 'Not found', 404)
+                res.status(404).json({
+                    message: 'Not found'
+                })
+                return;
+            }
+
+            res.status(200).json({
+                message: 'Successfully',
+                data: item
+            })
+            return;
+        } catch (error) {
+            logger.logError('getItemService', 'Internal Server Error ' + error.message, error, 500)
+            res.status(500).json({
+                message: 'Internal Server Error ' + error.message
+            })
+            return;
+        }
     }
 }

@@ -22,7 +22,7 @@ export default {
             .del();
     },
     deleteItems: async (item_ids: string[]) => {
-        if (!item_ids || !Array.isArray(item_ids) || item_ids.length === 0) 
+        if (!item_ids || !Array.isArray(item_ids) || item_ids.length === 0)
             return null;
 
         return db.transaction(async (trx) => {
@@ -39,13 +39,24 @@ export default {
     },
     updateItem: async (id: string, item: Item) => {
         const updatedItem = await db('item')
-        .where('item_id', id)
-        .update(item)
-        .returning('*')
+            .where('item_id', id)
+            .update(item)
+            .returning('*')
 
-        if(updatedItem.length === 0)
+        if (updatedItem.length === 0)
             return null;
 
         return updatedItem;
     },
+    getItemById: async (id: string) => {
+        const item = await db('item')
+        .select('*')
+        .where('item_id', id)
+        .first()
+
+        if(!item)
+            return null;
+
+        return item;
+    }
 }
