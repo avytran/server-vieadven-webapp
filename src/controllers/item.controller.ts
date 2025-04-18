@@ -15,7 +15,7 @@ export default {
             })
             return;
         } catch (error) {
-            logger.logError('itemService', 'Internal Server Error', error, 500)
+            logger.logError('getAllItemService', 'Internal Server Error', error, 500)
             res.status(500).json({
                 message: 'Internal Server Error' + " " + error.message
             })
@@ -28,7 +28,7 @@ export default {
             console.log(items)
 
             if (!items) {
-                logger.logWarning('itemService', 'No item found', 404)
+                logger.logWarning('getAllItemService', 'No item found', 404)
                 res.status(404).json({
                     message: 'No item found',
                 })
@@ -41,7 +41,7 @@ export default {
             })
             return;
         } catch (error) {
-            logger.logError('itemService', 'Internal Server Error ' + error.message, error, 500)
+            logger.logError('getAllItemService', 'Internal Server Error ' + error.message, error, 500)
             res.status(500).json({
                 message: 'Internal Server Error' + " " + error.message
             })
@@ -54,7 +54,7 @@ export default {
 
 
             if (!deletedItem) {
-                logger.logWarning('itemService', 'Not found', 404)
+                logger.logWarning('deleteItemService', 'Not found', 404)
                 res.status(404).json({
                     message: 'Not found'
                 })
@@ -64,7 +64,7 @@ export default {
             res.sendStatus(204);
             return;
         } catch (error) {
-            logger.logError('itemService', 'Internal Server Error ' + error.message, error, 500)
+            logger.logError('deleteItemService', 'Internal Server Error ' + error.message, error, 500)
             res.status(500).json({
                 message: 'Internal Server Error ' + error.message
             })
@@ -77,7 +77,7 @@ export default {
             const deletedItem = await itemService.deleteItems(item_ids)
 
             if (!deletedItem) {
-                logger.logWarning('itemService', 'Not found', 404)
+                logger.logWarning('deleteItemsService', 'Not found', 404)
                 res.status(404).json({
                     message: 'Not found'
                 })
@@ -87,7 +87,35 @@ export default {
             res.sendStatus(204);
             return;
         } catch (error) {
-            logger.logError('itemService', 'Internal Server Error ' + error.message, error, 500)
+            logger.logError('deleteItemsService', 'Internal Server Error ' + error.message, error, 500)
+            res.status(500).json({
+                message: 'Internal Server Error ' + error.message
+            })
+            return;
+        }
+    },
+    updateItem: async (req: Request, res: Response) => {
+        const { id } = req.params
+        const item = req.body
+
+        try {
+            const updatedItem = await itemService.updateItem(id, item)
+
+            if (!updatedItem) {
+                logger.logWarning('updateItemService', 'Not found', 404)
+                res.status(404).json({
+                    message: 'Not found'
+                })
+                return;
+            }
+
+            res.status(200).json({
+                message: 'Successfully',
+                data: updatedItem
+            })
+            return;
+        } catch (error) {
+            logger.logError('updateItemService', 'Internal Server Error ' + error.message, error, 500)
             res.status(500).json({
                 message: 'Internal Server Error ' + error.message
             })

@@ -36,5 +36,16 @@ export default {
 
             return affectedRows;
         });
-    }
+    },
+    updateItem: async (id: string, item: Item) => {
+        const updatedItem = await db('item')
+        .where('item_id', id)
+        .update(item)
+        .returning('*')
+
+        if(updatedItem.length === 0)
+            return null;
+
+        return updatedItem;
+    },
 }
