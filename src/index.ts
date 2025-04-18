@@ -1,5 +1,5 @@
 import express from 'express';
-import feedbackRoute from "./routes/feedback.route";
+import playerItemRoute from './routes/playerItem.route';
 import healthRoute from './routes/health.route';
 
 
@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/health', healthRoute);
-app.use("/feedback", feedbackRoute);
+app.use("/player-item", playerItemRoute);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
