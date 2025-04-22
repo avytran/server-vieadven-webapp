@@ -9,5 +9,16 @@ export default {
             return null;
 
         return missions;
+    },
+    updateMissionProgessOfAPlayer: async (id: string, progress: number) => {
+        const updatedMission = await db('player_dailymission')
+        .where('user_id', id)
+        .update({progress: progress})
+        .returning('*')
+
+        if(!updatedMission)
+            return null;
+
+        return updatedMission;
     }
 }

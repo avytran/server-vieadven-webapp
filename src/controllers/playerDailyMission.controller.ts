@@ -27,5 +27,32 @@ export default {
             })
             return;
         }
+    },
+    updateMissionProgessOfAPlayer: async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const { progress } = req.body;
+
+        try {
+            const updatedMission = await playerDailyMissionService.updateMissionProgessOfAPlayer(id, progress)
+
+            if(!updatedMission) {
+                res.status(404).json({
+                    message: 'Not found'
+                })
+                return;
+            }
+
+            res.status(200).json({
+                message: 'Successfully',
+                data: updatedMission
+            })
+            return;
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                message: 'Internal Server Error ' + error.message
+            })
+            return;
+        }
     }
 }
