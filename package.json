@@ -1,7 +1,7 @@
 {
-  "name": "server-et-webapp",
+  "name": "server-vieadven-webapp",
   "version": "1.0.0",
-  "description": "server-et-webapp",
+  "description": "server-vieadven-webapp",
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",

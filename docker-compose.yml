@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: vieadven_container
+    environment:
+      POSTGRES_USER: vieadvendev
+      POSTGRES_PASSWORD: vieadvendev
+      POSTGRES_DB: vieadvenweb
+    ports:
+      - "5433:5432"
+    volumes:
+      - vieadven_data:/var/lib/postgresql/data
+
+volumes:
+  vieadven_data:
