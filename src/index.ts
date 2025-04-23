@@ -1,14 +1,13 @@
 import express from 'express';
-import playerItemRoute from './routes/playerItem.route';
 import healthRoute from './routes/health.route';
-
+import missionRoute from "./routes/mission.route";
 
 const app = express();
 
 app.use(express.json());
 
 app.use('/health', healthRoute);
-app.use("/player-item", playerItemRoute);
+app.use("/missions", missionRoute);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
