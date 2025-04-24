@@ -1,5 +1,5 @@
 import express from 'express';
-
+import cors from 'cors';
 import healthRoute from './routes/health.route';
 import itemRoute from './routes/item.route';
 import playerDailyMissionRoute from './routes/playerDailyMission.route';
@@ -7,7 +7,7 @@ import provinceProgressRoute from './routes/provinceProgress.route';
 import leaderboardRoute from './routes/leaderboard.route'
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 app.use('/health', healthRoute);

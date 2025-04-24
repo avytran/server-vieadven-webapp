@@ -6,13 +6,20 @@ import { logger } from '../utils/log.util';
 export default {
     getAllMissionsOfAPlayer: async (req: Request, res: Response) => {
         try {
-            const missions = await playerDailyMissionService.getAllMissionsOfAPlayer();
+            const { userId } = req.query as { userId: string };
+            
+            if (!userId) {
+                res.status(400).json({ message: 'Missing userId in query params' });
+                return;
+            }
+            const missions = await playerDailyMissionService.getAllMissionsOfAPlayer(userId);
 
             if (!missions) {
                 logger.logWarning('getAllMissionsOfAPlayerService', 'No mission found', 404)
                 res.status(404).json({
                     message: 'No mission found',
                 })
+                return;
             }
             res.status(200).json({
                 message: 'Successfully',

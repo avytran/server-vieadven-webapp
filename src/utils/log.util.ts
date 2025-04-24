@@ -24,7 +24,7 @@ class LogUtil {
     public static getInstance(): LogUtil {
         if (!LogUtil.instance) {
             if (!process.env.DISCORD_WEBHOOK_URL) {
-                throw new Error("DISCORD_WEBHOOK_URL is not defined in .env file");
+                // throw new Error("DISCORD_WEBHOOK_URL is not defined in .env file");
             }
             LogUtil.instance = new LogUtil(process.env.DISCORD_WEBHOOK_URL);
         }

@@ -1,8 +1,9 @@
 import db from '../utils/db.util'
 
 export default {
-    getAllMissionsOfAPlayer: async () => {
+    getAllMissionsOfAPlayer: async (userId) => {
         const missions = await db('player_dailymission')
+        .where('user_id', userId)
         .join('daily_mission', 'player_dailymission.mission_id', '=', 'daily_mission.mission_id')
         .select('player_dailymission.*', 'daily_mission.*')
 
