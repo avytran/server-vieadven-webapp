@@ -6,7 +6,8 @@ import validate from '../middlewares/validate.mdw';
 
 const router = express.Router();
 
-router.get('/', provinceProgressController.getPlayerProvinceProgress);
-router.put('/:playerId/:provinceId', validate(updateProvinceProgressSchema), provinceProgressController.updateProvinceProgress);
+router.get('/:player_id/provinces', provinceProgressController.getAllProvincesOfAPlayer);
+router.get('/:player_id/provinces/:province_id', provinceProgressController.getPlayerProvinceProgress);
+router.put('/:player_id/provinces/:province_id', validate(updateProvinceProgressSchema), provinceProgressController.updateProvinceProgress);
 
 export default router;

@@ -3,10 +3,15 @@ const updateProgressSchema = {
     "properties": {
         "progress": {
             "type": "number"
+        },
+        "is_completed": {
+            "type": "boolean"
+        },
+        "claimed": {
+            "type": "boolean"
         }
     },
     "additionalProperties": false,
-    "required": ["progress"]
 }
 
 export { updateProgressSchema };
