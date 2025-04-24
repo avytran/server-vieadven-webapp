@@ -22,7 +22,6 @@ CREATE TABLE Landmark (
 CREATE TABLE Question (
     question_id CHAR(5) PRIMARY KEY,
     content TEXT,
-    answer TEXT,
     category VARCHAR(50),
     use_for_game BOOLEAN,
     landmark_id CHAR(5) REFERENCES Landmark(landmark_id)
@@ -175,10 +174,6 @@ ALTER TABLE question
 CREATE SEQUENCE IF NOT EXISTS landmark_id_seq START 1;
 ALTER TABLE landmark
     ALTER COLUMN landmark_id SET DEFAULT 'LM' || LPAD(nextval('landmark_id_seq')::TEXT, 3, '0');
-
-CREATE SEQUENCE IF NOT EXISTS province_id_seq START 1;
-ALTER TABLE province
-    ALTER COLUMN province_id SET DEFAULT 'vn-' || LPAD(nextval('province_id_seq')::TEXT, 2, '0');
 
 CREATE SEQUENCE IF NOT EXISTS gameplay_id_seq START 1;
 ALTER TABLE gameplay
