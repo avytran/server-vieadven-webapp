@@ -28,6 +28,13 @@ CREATE TABLE Question (
     landmark_id CHAR(5) REFERENCES Landmark(landmark_id)
 );
 
+CREATE TABLE Answer (
+    answer_id CHAR(5) PRIMARY KEY,
+    question_id CHAR(5) REFERENCES Question(question_id),
+    content TEXT NOT NULL,
+    is_correct BOOLEAN
+);
+
 -- 4. User (gốc cho Admin, Player)
 CREATE TABLE "User" (
     user_id CHAR(5) PRIMARY KEY,
@@ -371,3 +378,50 @@ CREATE TRIGGER trg_check_is_completed
 BEFORE INSERT OR UPDATE ON Gameplay
 FOR EACH ROW
 EXECUTE FUNCTION check_is_completed();
+
+-- Trigger function to enforce max 4 answers per question_id and only one correct answer
+CREATE OR REPLACE FUNCTION enforce_answer_constraints()
+RETURNS TRIGGER AS $$
+DECLARE
+    total_answers INT;
+    correct_answers INT;
+BEGIN
+    -- Đếm số lượng câu trả lời hiện có cho question_id
+    SELECT COUNT(*)
+    INTO total_answers
+    FROM Answer
+    WHERE question_id = NEW.question_id;
+
+    -- Nếu là INSERT, cộng thêm 1 bản ghi dự kiến
+    IF (TG_OP = 'INSERT') THEN
+        total_answers := total_answers + 1;
+    END IF;
+
+    -- Đếm số lượng câu trả lời đúng hiện có (bao gồm bản ghi mới nếu is_correct = true)
+    SELECT COUNT(*)
+    INTO correct_answers
+    FROM Answer
+    WHERE question_id = NEW.question_id AND is_correct = TRUE;
+
+    IF NEW.is_correct = TRUE THEN
+        correct_answers := correct_answers + 1;
+    END IF;
+
+    -- Kiểm tra ràng buộc
+    IF total_answers > 4 THEN
+        RAISE EXCEPTION 'A question can have at most 4 answers.';
+    END IF;
+
+    IF correct_answers > 1 THEN
+        RAISE EXCEPTION 'Only one correct answer is allowed per question.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_enforce_answer_constraints
+BEFORE INSERT OR UPDATE ON Answer
+FOR EACH ROW
+EXECUTE FUNCTION enforce_answer_constraints();
+
