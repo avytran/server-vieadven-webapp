@@ -170,7 +170,7 @@ ALTER TABLE leaderboard
 CREATE SEQUENCE IF NOT EXISTS question_id_seq START 1;
 ALTER TABLE question
     ALTER COLUMN question_id SET DEFAULT 'QT' || LPAD(nextval('question_id_seq')::TEXT, 3, '0');
-    
+
 CREATE SEQUENCE IF NOT EXISTS landmark_id_seq START 1;
 ALTER TABLE landmark
     ALTER COLUMN landmark_id SET DEFAULT 'LM' || LPAD(nextval('landmark_id_seq')::TEXT, 3, '0');
@@ -419,4 +419,3 @@ CREATE TRIGGER trg_enforce_answer_constraints
 BEFORE INSERT OR UPDATE ON Answer
 FOR EACH ROW
 EXECUTE FUNCTION enforce_answer_constraints();
-
