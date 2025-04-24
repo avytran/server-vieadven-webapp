@@ -40,8 +40,8 @@ export default {
         }
     },
     updateProvinceProgress: async (req: Request, res: Response) => {
-        const playerId = req.query.playerId.toString()
-        const provinceId = req.query.provinceId.toString()
+        const playerId = req.params.playerId
+        const provinceId = req.params.provinceId
         const provinceProgress = req.body;
 
         if (!playerId || !provinceId) {
