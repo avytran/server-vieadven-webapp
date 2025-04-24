@@ -3,7 +3,8 @@ import db from '../utils/db.util'
 export default {
     getAllMissionsOfAPlayer: async () => {
         const missions = await db('player_dailymission')
-        .select('*')
+        .join('daily_mission', 'player_dailymission.mission_id', '=', 'daily_mission.mission_id')
+        .select('player_dailymission.*', 'daily_mission.*')
 
         if(missions.length === 0)
             return null;
