@@ -6,7 +6,7 @@ const updateProvinceProgressSchema = {
         },
         "last_played": {
             "type": "string",
-            "format": "timestamp"
+            "format": "date-time"
         }
     },
     "additionalProperties": false
