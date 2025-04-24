@@ -1,19 +1,15 @@
 import db from "../utils/db.util";
 
 export default {
-    getAllItemsOfAPlayer: async (player_id: number) => {
+    getAllItemsOfAPlayer: async (player_id: string) => {
         try {
-            const items = await db("Player_Item")
-                .join("Item", "Player_Item.item_id", "Item.item_id")
+            const items = await db("player_item")
+                .join("item", "player_item.item_id", "item.item_id")
                 .select(
-                    "Player_Item.player_id",
-                    "Player_Item.item_id",
-                    "Player_Item.quantity",
-                    "Item.name",
-                    "Item.description",
-                    "Item.icon_url"
+                    "player_item.*",
+                    "item.*",
                 )
-                .where("Player_Item.player_id", player_id);
+                .where("player_item.player_id", player_id);
 
             return items;
         } catch (error) {
@@ -22,9 +18,9 @@ export default {
         }
     },
 
-    updateItemOfAPlayer: async (player_id: number, item_id: number, quantity: number) => {
+    updateItemOfAPlayer: async (player_id: string, item_id: string, quantity: number) => {
         try {
-            const updated = await db("Player_Item")
+            const updated = await db("player_item")
                 .where({ player_id, item_id })
                 .increment("quantity", quantity)
                 .returning(["player_id", "item_id", "quantity"]);

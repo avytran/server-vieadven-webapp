@@ -57,7 +57,6 @@ CREATE TABLE Item (
     description TEXT,
     icon_url VARCHAR(255)
 );
-
 -- 8. Player_Item (phụ thuộc Player, Item)
 CREATE TABLE Player_Item (
     player_id INT REFERENCES Player(user_id),
@@ -65,6 +64,7 @@ CREATE TABLE Player_Item (
     quantity INT,
     PRIMARY KEY (player_id, item_id)
 );
+
 
 -- 9. Badge (phụ thuộc Province)
 CREATE TABLE Badge (

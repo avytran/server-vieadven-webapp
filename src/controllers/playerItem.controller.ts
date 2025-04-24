@@ -6,7 +6,7 @@ export default {
         const { player_id } = req.params;
 
         try {
-            const items = await playerItemService.getAllItemsOfAPlayer(Number(player_id));
+            const items = await playerItemService.getAllItemsOfAPlayer(player_id);
 
             if (!items || items.length === 0) {
                 res.status(404).json({
@@ -41,8 +41,8 @@ export default {
 
         try {
             const updatedItem = await playerItemService.updateItemOfAPlayer(
-                Number(player_id),
-                Number(item_id),
+                player_id,
+                item_id,
                 quantity
             );
 
