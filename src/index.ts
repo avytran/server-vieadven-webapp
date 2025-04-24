@@ -1,10 +1,11 @@
 import express from 'express';
 import playerItemRoute from './routes/playerItem.route';
 import healthRoute from './routes/health.route';
-
+import cors from 'cors';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.use('/health', healthRoute);
