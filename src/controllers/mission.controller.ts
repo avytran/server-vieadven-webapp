@@ -34,11 +34,11 @@ export default {
     },
 
     updateMission: async (req: Request, res: Response): Promise<void> => {
-        const { mission_id } = req.params;
+        const { id } = req.params;
         const mission = req.body;
 
         try {
-            const updatedMission = await missionService.updateMission(Number(mission_id), mission);
+            const updatedMission = await missionService.updateMission(id, mission);
 
             if (!updatedMission) {
                 res.status(404).json({
@@ -60,10 +60,10 @@ export default {
     },
 
     deleteMission: async (req: Request, res: Response): Promise<void> => {
-        const { mission_id } = req.params;
+        const { id } = req.params;
 
         try {
-            const deletedCount = await missionService.deleteMission(Number(mission_id));
+            const deletedCount = await missionService.deleteMission(id);
 
             if (deletedCount === 0) {
                 res.status(404).json({

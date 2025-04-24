@@ -1,7 +1,7 @@
 import db from "../utils/db.util";
-
+import { Mission } from "../types/mission";
 export default {
-    createMission: async (mission: any) => {
+    createMission: async (mission: Mission) => {
         try {
             const newMission = await db("daily_mission")
                 .insert(mission)
@@ -23,10 +23,10 @@ export default {
         }
     },
 
-    updateMission: async (mission_id: number, mission: any) => {
+    updateMission: async (id: string, mission: Mission) => {
         try {
             const updatedMission = await db("daily_mission")
-                .where({ mission_id: Number(mission_id) })
+                .where("mission_id", id)
                 .update(mission)
                 .returning("*");
             return updatedMission.length > 0 ? updatedMission[0] : null;
@@ -36,10 +36,10 @@ export default {
         }
     },
 
-    deleteMission: async (mission_id: number) => {
+    deleteMission: async (id: string) => {
         try {
             const deletedCount = await db("daily_mission")
-                .where({ mission_id })
+                .where("mission_id", id)
                 .del();
             return deletedCount;
         } catch (error) {
