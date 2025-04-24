@@ -1,9 +1,10 @@
-import db from '../utils/db.util'
+import db from '../utils/db.util';
+import { dailyMission } from '../types/dailyMission';
 
 export default {
-    getAllMissionsOfAPlayer: async (userId) => {
+    getAllMissionsOfAPlayer: async (player_id) => {
         const missions = await db('player_dailymission')
-        .where('user_id', userId)
+        .where('user_id', player_id)
         .join('daily_mission', 'player_dailymission.mission_id', '=', 'daily_mission.mission_id')
         .select('player_dailymission.*', 'daily_mission.*')
 
@@ -12,10 +13,11 @@ export default {
 
         return missions;
     },
-    updateMissionProgessOfAPlayer: async (id: string, progress: number) => {
+    updateMissionProgessOfAPlayer: async (player_id: string, mission_id: string, updatedItem: dailyMission) => {
         const updatedMission = await db('player_dailymission')
-        .where('user_id', id)
-        .update({progress: progress})
+        .where('user_id', player_id)
+        .andWhere('mission_id', mission_id)
+        .update(updatedItem)
         .returning('*')
 
         if(!updatedMission)

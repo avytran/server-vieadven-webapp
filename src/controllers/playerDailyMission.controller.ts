@@ -6,13 +6,13 @@ import { logger } from '../utils/log.util';
 export default {
     getAllMissionsOfAPlayer: async (req: Request, res: Response) => {
         try {
-            const { userId } = req.query as { userId: string };
+            const { player_id } = req.params;
             
-            if (!userId) {
+            if (!player_id) {
                 res.status(400).json({ message: 'Missing userId in query params' });
                 return;
             }
-            const missions = await playerDailyMissionService.getAllMissionsOfAPlayer(userId);
+            const missions = await playerDailyMissionService.getAllMissionsOfAPlayer(player_id);
 
             if (!missions) {
                 logger.logWarning('getAllMissionsOfAPlayerService', 'No mission found', 404)
@@ -36,11 +36,11 @@ export default {
         }
     },
     updateMissionProgessOfAPlayer: async (req: Request, res: Response) => {
-        const { id } = req.params;
-        const { progress } = req.body;
+        const { player_id, mission_id } = req.params;
+        const updatedItem = req.body;
 
         try {
-            const updatedMission = await playerDailyMissionService.updateMissionProgessOfAPlayer(id, progress)
+            const updatedMission = await playerDailyMissionService.updateMissionProgessOfAPlayer(player_id, mission_id, updatedItem)
 
             if(!updatedMission) {
                 res.status(404).json({
