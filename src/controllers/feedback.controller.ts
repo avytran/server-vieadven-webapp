@@ -3,10 +3,10 @@ import feedbackService from "../services/feedback.service";
 
 export default {
     getFeedbackById: async (req: Request, res: Response): Promise<void> => {
-        try {
-            const { id } = req.params;
+        const { id } = req.params;
 
-            const feedback = await feedbackService.getFeedbackById(Number(id));
+        try {
+            const feedback = await feedbackService.getFeedbackById(id);
 
             if (!feedback) {
                 res.status(404).json({
@@ -20,13 +20,11 @@ export default {
                 message: "Successfully retrieved feedback",
                 data: feedback,
             });
-            return;
         } catch (error) {
             console.error("Error retrieving feedback:", error);
             res.status(500).json({
                 message: "Internal Server Error: " + error.message,
             });
-            return;
         }
     },
 
@@ -46,13 +44,11 @@ export default {
                 message: "Successfully retrieved all feedback",
                 data: feedbacks,
             });
-            return;
         } catch (error) {
             console.error("Error retrieving feedbacks:", error);
             res.status(500).json({
                 message: "Internal Server Error: " + error.message,
             });
-            return;
         }
     },
 
@@ -72,13 +68,11 @@ export default {
                 message: "The feedback is created successfully",
                 data: createdFeedback,
             });
-            return;
         } catch (error) {
             console.error("Error creating feedback:", error);
             res.status(500).json({
                 message: "Internal Server Error: " + error.message,
             });
-            return;
         }
     },
 
@@ -86,7 +80,7 @@ export default {
         const { id } = req.params;
 
         try {
-            const deletedCount = await feedbackService.deleteFeedback(Number(id));
+            const deletedCount = await feedbackService.deleteFeedback(id);
 
             if (deletedCount === 0) {
                 res.status(404).json({
@@ -98,20 +92,17 @@ export default {
             res.status(200).json({
                 message: "The feedback has been deleted successfully",
             });
-            return;
         } catch (error) {
             console.error("Error deleting feedback:", error);
             res.status(500).json({
                 message: "Internal Server Error: " + error.message,
             });
-            return;
         }
     },
 
-
     updateFeedback: async (req: Request, res: Response): Promise<void> => {
         const { id } = req.params;
-        const { content } = req.body;
+        const content = req.body;
 
         if (!content) {
             res.status(400).json({
@@ -121,7 +112,7 @@ export default {
         }
 
         try {
-            const updatedFeedback = await feedbackService.updateFeedback(Number(id), { content });
+            const updatedFeedback = await feedbackService.updateFeedback(id, content);
 
             if (!updatedFeedback) {
                 res.status(404).json({
@@ -134,13 +125,11 @@ export default {
                 message: "The feedback is updated successfully",
                 data: updatedFeedback,
             });
-            return;
         } catch (error) {
             console.error("Error updating feedback:", error);
             res.status(500).json({
                 message: "Internal Server Error: " + error.message,
             });
-            return;
         }
     },
 };

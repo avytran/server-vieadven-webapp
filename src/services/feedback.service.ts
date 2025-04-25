@@ -2,7 +2,7 @@ import db from "../utils/db.util";
 import { Feedback } from "../types/feedback";
 
 export default {
-    getFeedbackById: async (id: number): Promise<Feedback | null> => {
+    getFeedbackById: async (id: string): Promise<Feedback | null> => {
         try {
             const feedback = await db("feedback")
                 .select("*")
@@ -24,7 +24,7 @@ export default {
         }
     },
 
-    deleteFeedback: async (id: number): Promise<number> => {
+    deleteFeedback: async (id: string): Promise<number> => {
         try {
             return await db("feedback")
                 .where("feedback_id", id)
@@ -35,9 +35,7 @@ export default {
         }
     },
 
-
-
-    updateFeedback: async (id: number, feedback: Partial<Feedback>): Promise<Feedback | null> => {
+    updateFeedback: async (id: string, feedback: Feedback) => {
         try {
             const updatedFeedback = await db("feedback")
                 .where("feedback_id", id)
