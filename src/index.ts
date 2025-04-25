@@ -1,6 +1,8 @@
 import express from 'express';
-import cors from 'cors';
 import healthRoute from './routes/health.route';
+import missionRoute from "./routes/mission.route";
+import cors from 'cors';
+
 import itemRoute from './routes/item.route';
 import playerDailyMissionRoute from './routes/playerDailyMission.route';
 import provinceProgressRoute from './routes/provinceProgress.route';
@@ -12,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/health', healthRoute);
+app.use("/missions", missionRoute);
 app.use("/player-item", playerItemRoute);
 app.use('/items', itemRoute);
 app.use('/player-dailymissions', playerDailyMissionRoute);
