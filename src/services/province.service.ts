@@ -2,12 +2,14 @@ import db from '../utils/db.util';
 
 export default {
     getAllowedProvinces: async (player_id: string) => {
-        const allowedProvinces = await db('province')
-            .join('player', 'player.level', '=', 'province.display_order')
-            .where('player.user_id', player_id)
-            .select('province.*');
+        const player = await db('player').where({ user_id: player_id }).first();
+        if (!player) return [];
 
-        if (allowedProvinces.length === 0) return null;
+        const allowedProvinces = await db('province')
+            .where('display_order', '<=', player.level)
+            .select('*');
+
+        if (allowedProvinces.length === 0) return [];
 
         return allowedProvinces;
     }
