@@ -7,7 +7,7 @@ export default {
     getAllMissionsOfAPlayer: async (req: Request, res: Response) => {
         try {
             const { player_id } = req.params;
-            
+
             if (!player_id) {
                 res.status(400).json({ message: 'Missing userId in query params' });
                 return;
@@ -42,7 +42,7 @@ export default {
         try {
             const updatedMission = await playerDailyMissionService.updateMissionProgessOfAPlayer(player_id, mission_id, updatedItem)
 
-            if(!updatedMission) {
+            if (!updatedMission) {
                 res.status(404).json({
                     message: 'Not found'
                 })
@@ -59,6 +59,35 @@ export default {
             res.status(500).json({
                 message: 'Internal Server Error ' + error.message
             })
+            return;
+        }
+    },
+    claim: async (req: Request, res: Response) => {
+        const { mission_id, player_id } = req.body;
+
+        try {
+            const result = await playerDailyMissionService.claim(mission_id, player_id);
+            if (!result) {
+                res.status(404).json({
+                    message: 'Not found'
+                })
+                return;
+            }
+
+            res.status(200).json({
+                message: 'Mission claimed successfully',
+                ...result
+            });
+            return;
+        } catch (error) {
+            console.error('Error in claim controller:', error);
+
+            if (error.message === 'Mission already claimed') {
+                res.status(400).json({ error: error.message });
+                return;
+            }
+
+            res.status(500).json({ error: 'Internal server error' });
             return;
         }
     }
