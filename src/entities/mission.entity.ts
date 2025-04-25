@@ -11,8 +11,9 @@ const createMissionSchema = {
             "description": "A detailed description of the mission.",
         },
         "item_id": {
-            "type": "integer",
+            "type": "string",
             "description": "The ID of the item rewarded for completing the mission.",
+            "pattern": "^IM\\d{3}$"
         },
         "item_quantity": {
             "type": "integer",
@@ -51,8 +52,9 @@ const updateMissionSchema = {
             "description": "A detailed description of the mission.",
         },
         "item_id": {
-            "type": "integer",
+            "type": "string",
             "description": "The ID of the item rewarded for completing the mission.",
+            "pattern": "^IM\\d{3}$"
         },
         "item_quantity": {
             "type": "integer",

@@ -72,9 +72,7 @@ export default {
                 return;
             }
 
-            res.status(200).json({
-                message: "Mission deleted successfully",
-            });
+            res.sendStatus(204)
         } catch (error) {
             console.error("Error deleting mission:", error);
             res.status(500).json({
