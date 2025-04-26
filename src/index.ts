@@ -8,6 +8,7 @@ import playerDailyMissionRoute from './routes/playerDailyMission.route';
 import provinceProgressRoute from './routes/provinceProgress.route';
 import leaderboardRoute from './routes/leaderboard.route';
 import playerItemRoute from './routes/playerItem.route';
+import questionAnswerRoute from './routes/questionAnswer.route';
 import landmarkRoute from './routes/landmark.route';
 import provinceRoute from './routes/province.route';
 
@@ -20,8 +21,9 @@ app.use("/missions", missionRoute);
 app.use("/player-item", playerItemRoute);
 app.use('/items', itemRoute);
 app.use('/player-dailymissions', playerDailyMissionRoute);
-app.use('/province-progress', provinceProgressRoute);
-app.use('/leaderboards', leaderboardRoute);
+app.use('/province-progress', provinceProgressRoute)
+app.use('/leaderboards', leaderboardRoute)
+app.use('/question-answer', questionAnswerRoute)
 app.use('/landmarks', landmarkRoute);
 app.use('/provinces', provinceRoute)
 
