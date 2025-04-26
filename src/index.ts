@@ -8,6 +8,7 @@ import playerDailyMissionRoute from './routes/playerDailyMission.route';
 import provinceProgressRoute from './routes/provinceProgress.route';
 import leaderboardRoute from './routes/leaderboard.route';
 import playerItemRoute from './routes/playerItem.route';
+import landmarkRoute from './routes/landmark.route';
 import provinceRoute from './routes/province.route';
 
 const app = express();
@@ -19,8 +20,9 @@ app.use("/missions", missionRoute);
 app.use("/player-item", playerItemRoute);
 app.use('/items', itemRoute);
 app.use('/player-dailymissions', playerDailyMissionRoute);
-app.use('/province-progress', provinceProgressRoute)
-app.use('/leaderboards', leaderboardRoute)
+app.use('/province-progress', provinceProgressRoute);
+app.use('/leaderboards', leaderboardRoute);
+app.use('/landmarks', landmarkRoute);
 app.use('/provinces', provinceRoute)
 
 const PORT = process.env.PORT || 8080;
