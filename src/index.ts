@@ -9,6 +9,10 @@ import provinceProgressRoute from './routes/provinceProgress.route';
 import leaderboardRoute from './routes/leaderboard.route';
 import playerItemRoute from './routes/playerItem.route';
 import gameplayRoute from './routes/gameplay.route'
+import questionAnswerRoute from './routes/questionAnswer.route';
+import landmarkRoute from './routes/landmark.route';
+import provinceRoute from './routes/province.route';
+
 
 const app = express();
 app.use(cors());
@@ -22,6 +26,9 @@ app.use('/player-dailymissions', playerDailyMissionRoute);
 app.use('/province-progress', provinceProgressRoute)
 app.use('/leaderboards', leaderboardRoute)
 app.use('/gameplays', gameplayRoute)
+app.use('/question-answer', questionAnswerRoute)
+app.use('/landmarks', landmarkRoute);
+app.use('/provinces', provinceRoute)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
