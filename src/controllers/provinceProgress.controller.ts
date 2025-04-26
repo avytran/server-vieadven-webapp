@@ -4,7 +4,7 @@ import provinceProgressService from "../services/provinceProgress.service";
 
 export default {
     getAllProvincesOfAPlayer: async (req: Request, res: Response) => {
-        const { player_id } = req.params;  
+        const { player_id } = req.params;
         try {
             if (!player_id) {
                 res.status(400).json({
@@ -100,6 +100,26 @@ export default {
             res.status(500).json({
                 message: 'Internal Server Error ' + error.message
             })
+            return;
+        }
+    },
+    createProvinceProgress: async (req: Request, res: Response) => {
+        try {
+            const provinceProgress = req.body;
+
+            const result = await provinceProgressService.createProvinceProgress(provinceProgress);
+
+            res.status(201).json({
+                message: 'Province progress created or updated successfully',
+                data: result
+            });
+            return;
+        } catch (error) {
+            console.error('Error creating province progress:', error);
+            res.status(500).json({
+                message: 'Failed to create or update province progress',
+                error: error.message
+            });
             return;
         }
     }

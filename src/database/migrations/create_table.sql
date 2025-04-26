@@ -5,7 +5,7 @@ CREATE TABLE Province (
     description TEXT,
     coordinates TEXT,
     total_stars INT,
-    display_order INT
+    display_order SERIAL UNIQUE
 );
 
 -- 2. Landmark (phụ thuộc Province)
@@ -38,7 +38,7 @@ CREATE TABLE Answer (
 CREATE TABLE "User" (
     user_id CHAR(5) PRIMARY KEY,
     name VARCHAR(100),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
     avatar_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -54,7 +54,7 @@ CREATE TABLE Admin (
 -- 6. Player (phụ thuộc User, Province)
 CREATE TABLE Player (
     user_id CHAR(5) PRIMARY KEY REFERENCES "User"(user_id),
-    last_province_id CHAR(5) REFERENCES Province(province_id)
+    level INT REFERENCES province(display_order)
 );
 
 -- 7. Item
@@ -67,8 +67,8 @@ CREATE TABLE Item (
 
 -- 8. Player_Item (phụ thuộc Player, Item)
 CREATE TABLE Player_Item (
-    player_id CHAR(5) UNIQUE REFERENCES Player(user_id),
-    item_id CHAR(5) UNIQUE REFERENCES Item(item_id),
+    player_id CHAR(5) REFERENCES Player(user_id),
+    item_id CHAR(5) REFERENCES Item(item_id),
     quantity INT,
     PRIMARY KEY (player_id, item_id)
 );
@@ -105,7 +105,8 @@ CREATE TABLE Gameplay (
     landmark_id CHAR(5) REFERENCES Landmark(landmark_id),
     star INT,
     score INT,
-    is_completed BOOLEAN
+    is_completed BOOLEAN,
+    UNIQUE(user_id, landmark_id)
 );
 
 -- 13. Player_ProvinceProgress (phụ thuộc Player, Province)
@@ -170,6 +171,10 @@ ALTER TABLE leaderboard
 CREATE SEQUENCE IF NOT EXISTS question_id_seq START 1;
 ALTER TABLE question
     ALTER COLUMN question_id SET DEFAULT 'QT' || LPAD(nextval('question_id_seq')::TEXT, 3, '0');
+
+CREATE SEQUENCE IF NOT EXISTS answer_id_seq START 1;
+ALTER TABLE answer
+    ALTER COLUMN answer_id SET DEFAULT 'QT' || LPAD(nextval('answer_id_seq')::TEXT, 3, '0');
 
 CREATE SEQUENCE IF NOT EXISTS landmark_id_seq START 1;
 ALTER TABLE landmark
