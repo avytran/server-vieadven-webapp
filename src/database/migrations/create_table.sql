@@ -1,6 +1,6 @@
 -- 1. Province
 CREATE TABLE Province (
-    province_id CHAR(5) PRIMARY KEY,
+    province_id CHAR(10) PRIMARY KEY,
     province_name VARCHAR(100),
     description TEXT,
     coordinates TEXT,
