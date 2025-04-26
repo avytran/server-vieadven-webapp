@@ -105,7 +105,8 @@ CREATE TABLE Gameplay (
     landmark_id CHAR(5) REFERENCES Landmark(landmark_id),
     star INT,
     score INT,
-    is_completed BOOLEAN
+    is_completed BOOLEAN,
+    UNIQUE(user_id, landmark_id)
 );
 
 -- 13. Player_ProvinceProgress (phụ thuộc Player, Province)
