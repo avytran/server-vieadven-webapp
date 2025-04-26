@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.get('/:player_id/missions', playerDailyMissionController.getAllMissionsOfAPlayer);
 router.put('/:player_id/missions/:mission_id', validate(updateProgressSchema), playerDailyMissionController.updateMissionProgessOfAPlayer)
+router.post('/claim', playerDailyMissionController.claim)
 
 export default router;
