@@ -12,6 +12,7 @@ import gameplayRoute from './routes/gameplay.route'
 import questionAnswerRoute from './routes/questionAnswer.route';
 import landmarkRoute from './routes/landmark.route';
 import provinceRoute from './routes/province.route';
+import authRoute from './routes/auth.route'
 
 
 const app = express();
@@ -23,12 +24,13 @@ app.use("/missions", missionRoute);
 app.use("/player-item", playerItemRoute);
 app.use('/items', itemRoute);
 app.use('/player-dailymissions', playerDailyMissionRoute);
+app.use('/leaderboards', leaderboardRoute);
+app.use('/question-answer', questionAnswerRoute);
 app.use('/province-progress', provinceProgressRoute)
-app.use('/leaderboards', leaderboardRoute)
 app.use('/gameplays', gameplayRoute)
-app.use('/question-answer', questionAnswerRoute)
 app.use('/landmarks', landmarkRoute);
-app.use('/provinces', provinceRoute)
+app.use('/provinces', provinceRoute);
+app.use('/auth', authRoute)
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
