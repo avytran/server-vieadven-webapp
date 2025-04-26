@@ -38,7 +38,7 @@ CREATE TABLE Answer (
 CREATE TABLE "User" (
     user_id CHAR(5) PRIMARY KEY,
     name VARCHAR(100),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
     avatar_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

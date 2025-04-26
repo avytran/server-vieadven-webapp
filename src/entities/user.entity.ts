@@ -23,4 +23,19 @@ const createUserSchema = {
     "required": ["name", "email", "password", "avatar_url"]
 }
 
-export { createUserSchema }
+const loginSchema = {
+    "type": "object",
+    "properties": {
+        "username": {
+            "type": "string",
+            "format": "email"
+        },
+        "password": {
+            "type": "string",
+        }
+    },
+    "additionalProperties": false,
+    "required": ["username", "password"]
+}
+
+export { createUserSchema, loginSchema }
