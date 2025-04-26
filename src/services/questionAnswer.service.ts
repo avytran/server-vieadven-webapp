@@ -2,7 +2,7 @@ import db from '../utils/db.util';
 
 export default {
     getQuestions: async (landmark_id: string) => {
-        const questions = await db('questions')
+        const questions = await db('question')
             .where('landmark_id', landmark_id)
             .select('*');
 
@@ -10,7 +10,7 @@ export default {
 
         const questionIds = questions.map(q => q.question_id);
 
-        const answers = await db('answers')
+        const answers = await db('answer')
             .whereIn('question_id', questionIds)
             .select('*');
 
