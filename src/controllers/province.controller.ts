@@ -14,7 +14,7 @@ export default {
 
             const allowedProvinces = await provinceService.getAllowedProvinces(player_id)
 
-            if (!allowedProvinces) {
+            if (allowedProvinces.length === 0) {
                 res.status(404).json({
                     message: 'Not found'
                 })
