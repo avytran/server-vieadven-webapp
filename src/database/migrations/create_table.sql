@@ -38,7 +38,7 @@ CREATE TABLE Answer (
 CREATE TABLE "User" (
     user_id CHAR(5) PRIMARY KEY,
     name VARCHAR(100),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     password VARCHAR(255),
     avatar_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -105,7 +105,8 @@ CREATE TABLE Gameplay (
     landmark_id CHAR(5) REFERENCES Landmark(landmark_id),
     star INT,
     score INT,
-    is_completed BOOLEAN
+    is_completed BOOLEAN,
+    UNIQUE(user_id, landmark_id)
 );
 
 -- 13. Player_ProvinceProgress (phụ thuộc Player, Province)
