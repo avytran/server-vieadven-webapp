@@ -23,7 +23,6 @@ const createProvinceProgressSchema = {
         "province_id": {
             "type": "string",
             "maxLength": 5,
-            "pattern": "^vn-\\d{2}$"
         },
         "stars": {
             "type": "number"
