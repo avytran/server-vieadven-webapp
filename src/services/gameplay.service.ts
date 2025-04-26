@@ -30,5 +30,28 @@ export default {
             .returning('*')
 
         return updatedGameplay;
+    },
+    getGameplayByUserIdAndProvinceId: async (province_id: string, user_id: string) => {
+        const province = await db('province')
+            .where({ province_id })
+            .first();
+
+        if (!province) throw new Error('Province not found');
+
+        const landmarkIds = await db('landmark')
+            .where({ province_id: province.province_id })
+            .pluck('landmark_id'); // Lấy mảng landmark_id
+
+        if (landmarkIds.length === 0) throw new Error('No landmark found');
+
+        const gameplays = await db('gameplay')
+            .join('landmark', 'gameplay.landmark_id', 'landmark.landmark_id')
+            .select('gameplay.*', 'landmark.*')
+            .where('gameplay.user_id', user_id)
+            .whereIn('gameplay.landmark_id', landmarkIds);
+
+        if (gameplays.length === 0) throw new Error('No gameplay found');
+
+        return gameplays;
     }
 }

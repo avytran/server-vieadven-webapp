@@ -16,7 +16,7 @@ export default {
             .join('User', 'player_provinceprogress.player_id', '=', 'User.user_id')
             .join('player', 'player_provinceprogress.player_id', '=', 'player.user_id')
             .join('province', 'player_provinceprogress.province_id', '=', 'province.province_id')
-            .select('player_provinceprogress.*', 'User.name', 'player.last_province_id', 'province.province_name', 'province.coordinates')
+            .select('player_provinceprogress.*', 'User.name', 'player.*', 'province.*')
             .where('player_provinceprogress.player_id', player_id)
             .andWhere('player_provinceprogress.province_id', province_id)
             .first();
