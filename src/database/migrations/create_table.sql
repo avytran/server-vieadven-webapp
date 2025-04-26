@@ -5,7 +5,7 @@ CREATE TABLE Province (
     description TEXT,
     coordinates TEXT,
     total_stars INT,
-    display_order INT
+    display_order SERIAL UNIQUE
 );
 
 -- 2. Landmark (phụ thuộc Province)
@@ -54,7 +54,7 @@ CREATE TABLE Admin (
 -- 6. Player (phụ thuộc User, Province)
 CREATE TABLE Player (
     user_id CHAR(5) PRIMARY KEY REFERENCES "User"(user_id),
-    last_province_id CHAR(5) REFERENCES Province(province_id)
+    level INT REFERENCES province(display_order)
 );
 
 -- 7. Item
@@ -67,8 +67,8 @@ CREATE TABLE Item (
 
 -- 8. Player_Item (phụ thuộc Player, Item)
 CREATE TABLE Player_Item (
-    player_id CHAR(5) UNIQUE REFERENCES Player(user_id),
-    item_id CHAR(5) UNIQUE REFERENCES Item(item_id),
+    player_id CHAR(5) REFERENCES Player(user_id),
+    item_id CHAR(5) REFERENCES Item(item_id),
     quantity INT,
     PRIMARY KEY (player_id, item_id)
 );
