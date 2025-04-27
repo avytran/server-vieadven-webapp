@@ -1,4 +1,5 @@
 import express from 'express';
+import chatbotRoute from './routes/chatbot.route';
 import healthRoute from './routes/health.route';
 import missionRoute from "./routes/mission.route";
 import cors from 'cors';
@@ -13,11 +14,15 @@ import questionAnswerRoute from './routes/questionAnswer.route';
 import landmarkRoute from './routes/landmark.route';
 import provinceRoute from './routes/province.route';
 import authRoute from './routes/auth.route'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/', chatbotRoute);
 
 app.use('/health', healthRoute);
 app.use("/missions", missionRoute);
