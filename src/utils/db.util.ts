@@ -1,12 +1,15 @@
 import knex, { Knex } from 'knex';
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const config: { [key: string]: Knex.Config } = {
     development: {
         client: 'pg',
         connection: {
-            host: 'aws-0-ap-southeast-1.pooler.supabase.com',  // Thay bằng host của Supabase hoặc PgBouncer
-            user: 'postgres.oycqdxhlckxpebthkdhc',               // Username Supabase
-            password: 'etclubweb',   // Mật khẩu của bạn
+            host: process.env.DB_HOST,  // Thay bằng host của Supabase hoặc PgBouncer
+            user: process.env.DB_USER,               // Username Supabase
+            password: process.env.DB_PASSWORD,   // Mật khẩu của bạn
             database: 'postgres',           // Tên database (ví dụ 'postgres')
             port: 5432,                     // Cổng kết nối PostgreSQL
             ssl: { rejectUnauthorized: false } // Bật SSL cho Supabase
