@@ -28,7 +28,7 @@ export default {
     login: async (loginInfo: Login) => {
         const user = await db("User")
             .join("player", "User.user_id", "=", "player.user_id")
-            .where("User.email", loginInfo.username)
+            .where("User.email", loginInfo.email)
             .select("User.*", "player.level")
             .first()
 

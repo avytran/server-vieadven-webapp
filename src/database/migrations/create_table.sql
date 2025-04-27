@@ -301,10 +301,17 @@ BEGIN
     -- Tính toán lại điểm số của người chơi từ quantity
     new_score := NEW.quantity;  -- quantity chính là total_score
 
-    -- Cập nhật điểm số của người chơi trong bảng Leaderboard
-    UPDATE Leaderboard
-    SET total_score = new_score
-    WHERE player_id = NEW.player_id;
+    -- Kiểm tra xem người chơi đã có trong leaderboard chưa
+    IF NOT EXISTS (SELECT 1 FROM Leaderboard WHERE player_id = NEW.player_id) THEN
+        -- Nếu chưa có, thêm người chơi vào leaderboard
+        INSERT INTO Leaderboard (player_id, total_score, rank)
+        VALUES (NEW.player_id, new_score, 0);
+    ELSE
+        -- Cập nhật điểm số nếu người chơi đã có trong leaderboard
+        UPDATE Leaderboard
+        SET total_score = total_score + new_score, updated_at = CURRENT_TIMESTAMP
+        WHERE player_id = NEW.player_id;
+    END IF;
 
     -- Cập nhật lại rank của tất cả người chơi dựa trên total_score
     WITH ranked_leaderboard AS (
@@ -424,3 +431,138 @@ CREATE TRIGGER trg_enforce_answer_constraints
 BEFORE INSERT OR UPDATE ON Answer
 FOR EACH ROW
 EXECUTE FUNCTION enforce_answer_constraints();
+
+CREATE OR REPLACE FUNCTION handle_player_creation_or_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Step 1: Kiểm tra và tạo Player_Item nếu chưa có
+    INSERT INTO Player_Item (player_id, item_id, quantity)
+    SELECT NEW.user_id, i.item_id, 0 -- Số lượng ban đầu là 0
+    FROM Item i
+    WHERE NOT EXISTS (
+        SELECT 1 FROM Player_Item pi WHERE pi.player_id = NEW.user_id AND pi.item_id = i.item_id
+    );
+
+    -- Step 2: Kiểm tra và tạo Player_ProvinceProgress nếu chưa có
+    IF NOT EXISTS (
+        SELECT 1 FROM Player_ProvinceProgress 
+        WHERE player_id = NEW.user_id 
+        AND province_id = (SELECT province_id FROM Province WHERE display_order = NEW.level)
+    ) THEN
+        -- Lấy province_id từ province có display_order bằng level của player
+        INSERT INTO Player_ProvinceProgress (player_id, province_id, stars, last_played)
+        SELECT NEW.user_id, p.province_id, 0, CURRENT_TIMESTAMP -- Stars ban đầu là 0
+        FROM Province p
+        WHERE p.display_order = NEW.level;
+        
+        -- Step 3: Tạo Gameplay cho các Landmark trong Province tương ứng với level của player
+        INSERT INTO Gameplay (user_id, landmark_id, star, score, is_completed)
+        SELECT NEW.user_id, l.landmark_id, 0, 0, FALSE -- star, score ban đầu là 0, chưa hoàn thành
+        FROM Landmark l
+        JOIN Province p ON l.province_id = p.province_id
+        WHERE p.display_order = NEW.level
+        AND NOT EXISTS (
+            SELECT 1 FROM Gameplay g WHERE g.user_id = NEW.user_id AND g.landmark_id = l.landmark_id
+        );
+    END IF;
+
+    INSERT INTO Player_DailyMission (user_id, mission_id, progress, is_completed, last_update, claimed)
+    SELECT NEW.user_id, dm.mission_id, 0, FALSE, CURRENT_TIMESTAMP, FALSE
+    FROM Daily_Mission dm
+    WHERE dm.is_active = TRUE
+    AND NOT EXISTS (
+        SELECT 1 FROM Player_DailyMission pdm WHERE pdm.user_id = NEW.user_id AND pdm.mission_id = dm.mission_id
+    );
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER player_creation_or_update_trigger
+AFTER INSERT OR UPDATE ON Player
+FOR EACH ROW
+EXECUTE FUNCTION handle_player_creation_or_update();
+
+CREATE OR REPLACE FUNCTION handle_gameplay_completion()
+RETURNS TRIGGER AS $$
+DECLARE
+    max_display_order INT;
+    completed_landmarks INT;
+    total_landmarks INT;
+BEGIN
+    -- Bước 1: Lấy display_order của province có level cao nhất cho player
+    SELECT MAX(p.display_order)
+    INTO max_display_order
+    FROM Province p
+    JOIN Player_ProvinceProgress pp ON pp.province_id = p.province_id
+    WHERE pp.player_id = NEW.user_id;
+
+    -- Bước 2: Kiểm tra tất cả các landmark của player trong province này
+    SELECT COUNT(*) INTO completed_landmarks
+    FROM Gameplay g
+    JOIN Landmark l ON g.landmark_id = l.landmark_id
+    WHERE g.user_id = NEW.user_id
+    AND l.province_id = (SELECT province_id FROM Province WHERE display_order = max_display_order)
+    AND g.is_completed = TRUE;
+
+    -- Bước 3: Lấy tổng số landmark trong province này
+    SELECT COUNT(*) INTO total_landmarks
+    FROM Landmark l
+    WHERE l.province_id = (SELECT province_id FROM Province WHERE display_order = max_display_order);
+
+    -- Bước 4: Nếu tất cả các landmark trong province đã hoàn thành, tăng level của player
+    IF completed_landmarks = total_landmarks THEN
+        -- Cập nhật level của player
+        UPDATE Player
+        SET level = level + 1
+        WHERE user_id = NEW.user_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_gameplay_completion
+AFTER UPDATE ON Gameplay
+FOR EACH ROW
+WHEN (NEW.is_completed = TRUE)  -- Chỉ kích hoạt khi một landmark được hoàn thành
+EXECUTE FUNCTION handle_gameplay_completion();
+
+CREATE OR REPLACE FUNCTION update_star_based_on_score()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Lấy total_question từ Landmark tương ứng
+    DECLARE
+        total_questions INT;
+    BEGIN
+        SELECT total_question INTO total_questions
+        FROM Landmark
+        WHERE landmark_id = NEW.landmark_id;
+
+        -- Tính toán star dựa trên tỷ lệ score / total_question
+        IF NEW.score < (total_questions / 3) THEN
+            NEW.star := 0;
+        ELSIF NEW.score >= (total_questions / 3) AND NEW.score < (2 * total_questions / 3) THEN
+            NEW.star := 1;
+        ELSIF NEW.score >= (2 * total_questions / 3) AND NEW.score < total_questions THEN
+            NEW.star := 2;
+        ELSE
+            NEW.star := 3;
+        END IF;
+
+        -- Cập nhật giá trị star trong bảng Gameplay
+        UPDATE Gameplay
+        SET star = NEW.star
+        WHERE gameplay_id = NEW.gameplay_id;
+
+        RETURN NEW;
+    END;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_update_star_on_score_change
+AFTER UPDATE OF score
+ON Gameplay
+FOR EACH ROW
+WHEN (OLD.score IS DISTINCT FROM NEW.score)  -- Chỉ kích hoạt khi score thay đổi
+EXECUTE FUNCTION update_star_based_on_score();

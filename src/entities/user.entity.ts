@@ -20,13 +20,13 @@ const createUserSchema = {
         }
     },
     "additionalProperties": false,
-    "required": ["name", "email", "password", "avatar_url"]
+    "required": ["name", "email", "password"]
 }
 
 const loginSchema = {
     "type": "object",
     "properties": {
-        "username": {
+        "email": {
             "type": "string",
             "format": "email"
         },
@@ -35,7 +35,7 @@ const loginSchema = {
         }
     },
     "additionalProperties": false,
-    "required": ["username", "password"]
+    "required": ["email", "password"]
 }
 
 export { createUserSchema, loginSchema }
