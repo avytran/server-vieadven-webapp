@@ -1,5 +1,6 @@
 import express from 'express';
 import chatbotRoute from './routes/chatbot.route';
+import feedbackRoute from "./routes/feedback.route";
 import healthRoute from './routes/health.route';
 import missionRoute from "./routes/mission.route";
 import cors from 'cors';
@@ -36,6 +37,7 @@ app.use('/gameplays', gameplayRoute)
 app.use('/landmarks', landmarkRoute);
 app.use('/provinces', provinceRoute);
 app.use('/auth', authRoute)
+app.use("/feedback", feedbackRoute);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
