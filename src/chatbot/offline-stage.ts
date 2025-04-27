@@ -59,6 +59,7 @@ async function loadDocumentsFromDirectory(directoryPath: string): Promise<void> 
     console.log(`Successfully processed ${files.length} files.`);
   } catch (error) {
     console.error("Error loading documents:", error);
+
   }
 }
 

@@ -196,13 +196,21 @@ async function getChatbotResponse(userMessage: string): Promise<string> {
     .catch(err => console.error("Failed to initialize:", err));
 
   // Test the chatbot
-  getChatbotResponse('Bạn có thể kể về tỉnh Cao Bằng không?')
-    .then(response => console.log({
-      "Question:": 'Bạn có thể kể về tỉnh Cao Bằng không?',
-      "Response:": response
-    }));
+  // getChatbotResponse('Bạn có thể kể về tỉnh Cao Bằng không?')
+  //   .then(response => console.log({
+  //     "Question:": 'Bạn có thể kể về tỉnh Cao Bằng không?',
+  //     "Response:": response
+  //   }));
 })();
-
+(async () => {
+  try {
+    console.log("Saving vectors to file...");
+    await vectorDb.save();
+    console.log("Vectors saved successfully!");
+  } catch (error) {
+    console.error("Error saving vectors to file:", error);
+  }
+})();
 export {
   getChatbotResponse,
   findRelevantDocuments,

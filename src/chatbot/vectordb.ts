@@ -153,12 +153,13 @@ class SimpleVectorDB {
       if (!this.initialized) await this.initialize();
 
       // Save vectors to a JSON file
-      await fs.writeFile(
-        path.join(this.dbPath, this.db_name + '.json'),
-        JSON.stringify(this.vectors, null, 2),
-        'utf8'
-      );
+      const filePath = path.join(this.dbPath, this.db_name + '.json');
+      console.log("Saving vectors to file:", filePath);
 
+      const jsonData = JSON.stringify(this.vectors, null, 2);
+      await fs.writeFile(filePath, jsonData, 'utf8');
+
+      console.log("Vectors saved successfully.");
       return true;
     } catch (error) {
       console.error("Failed to save vector database:", error);
